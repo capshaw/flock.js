@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flock.js Example</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link type="text/css" rel="stylesheet" href="css/index.css" />
+    <link rel="icon" type="image/png" href="img/foreach.png" />
+</head>
+<body>
+    <!-- All the HTML you need: two canvas stacked on top of one another. -->
+    <div class="page center">
+        <canvas class="canvas back" id="back-canvas"></canvas>
+        <canvas class="canvas" id="flock-canvas"></canvas>
+    </div>
+
+    <!-- Load and initialize the app. -->
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script type="text/javascript" src="flock.js"></script>
+    <script type="text/javascript">
+        var app = flockApp();
+        app.init({
+            canvasFrontId: "flock-canvas",
+            canvasBackId: "back-canvas"
+        });
+    </script>
+</body>
+</html>
