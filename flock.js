@@ -5,6 +5,7 @@ var flockApp = function() {
     var options = {
         canvasFrontId: null,
         canvasBackId: null,
+        canvasOnClickAddBoid: true,
         boidSight: 100,
         boidMinVelocity: 5,
         boidMaxVelocity: 20,
@@ -96,10 +97,12 @@ var flockApp = function() {
         });
 
         $("#" + options.canvasFrontId).on("click", function(e){
-            var boid = buildRandomBoid();
-            boid.x = e.pageX;
-            boid.y = e.pageY;
-            flock.push(boid);
+            if(options.canvasOnClickAddBoid) {
+                var boid = buildRandomBoid();
+                boid.x = e.pageX;
+                boid.y = e.pageY;
+                flock.push(boid);
+            }
         });
     }
 
