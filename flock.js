@@ -94,6 +94,13 @@ var flockApp = function() {
             resizeCanvas(frontCanvas);
             resizeCanvas(backCanvas);
         });
+
+        $("#" + options.canvasFrontId).on("click", function(e){
+            var boid = buildRandomBoid();
+            boid.x = e.pageX;
+            boid.y = e.pageY;
+            flock.push(boid);
+        });
     }
 
     /* Javascript '%' operator returns remainder. This function implements the
