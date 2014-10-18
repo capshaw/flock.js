@@ -154,7 +154,7 @@ var flockApp = function() {
     /* Find the distance between two boids. Does not take into account canvas
      * wraparound. */
     var distance = function (boidA, boidB) {
-        return Math.sqrt(Math.pow(boidA.x - boidB.x, 2) + Math.pow(boidA.y - boidB.y, 2));
+        return Math.pow(boidA.x - boidB.x, 2) + Math.pow(boidA.y - boidB.y, 2);
     }
 
     /* Update each of the boid's vectors and position on the canvas. */
