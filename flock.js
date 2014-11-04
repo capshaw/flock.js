@@ -160,22 +160,30 @@ var flockApp = function() {
     /* Update each of the boid's vectors and position on the canvas. */
     var updateFlock = function () {
         clearCanvas();
-        var i = flock.length,
-            j,
-            boid,
-            other;
-        /* zero out totals */
+        resetTotals();
+        findLocals();
+        calculateMovementAndDraw();
+    }
+
+	/* reset the numbers used in movement calculations */
+	var resetTotals = function () {
+		var i = flock.length;
+		/* zero out totals */
         while(--i) {
             boid = flock[i];
             boid.locals = 0;
             boid.averageXHeading = 0;
             boid.averageYHeading = 0;
         }
-        /* find locals */
-        i = flock.length;
+	}
+
+	/* Record each local boid */
+	var findLocals = function () {
+        var i = flock.length, j, other;
+		/* find locals */
         while(--i) {
             boid = flock[i];
-            /* Find local boids. Fun O(n^2) times! */
+            /* Find local boids. Fun O(n^2/2) times! */
             j = i;
             while(--j) {
                 other = flock[j];
@@ -189,8 +197,14 @@ var flockApp = function() {
                 }
             }
         }
-        /* calculate movement */
-        i = flock.length;
+	}
+
+	/* Calulates the boid's next position & draws it to the canvas */
+	var calculateMovementAndDraw = function () {
+		/* calculate movement */
+        var i = flock.length, boid,
+			newXHeading, newYHeading,
+			dtheta;
         while(--i) {
             boid = flock[i];
             if(boid.locals > 0) {
@@ -198,14 +212,14 @@ var flockApp = function() {
                 boid.averageYHeading /= boid.locals;
 
                 // Move torwards average local heading.
-                var newYHeading = (boid.averageYHeading + Math.sin(boid.theta))/2;
-                var newXHeading = (boid.averageXHeading + Math.cos(boid.theta))/2;
+                newYHeading = (boid.averageYHeading + Math.sin(boid.theta))/2;
+                newXHeading = (boid.averageXHeading + Math.cos(boid.theta))/2;
                 boid.theta = Math.atan2(newYHeading, newXHeading);
             }
 
             // Change directions randomly based on likelihood of doing so.
             if(Math.random() < options.boidTurningLikelihood){;
-                var dtheta = Math.PI / 10;
+                dtheta = Math.PI / 10;
                 if(Math.random() > 0.5) {
                     dtheta *= -1;
                 }
@@ -227,7 +241,7 @@ var flockApp = function() {
 
             drawboid(frontContext, boid);
         }
-    }
+	}
 
     /* Draw a boid to the front canvas and it's trail to the back canvas. */
     var drawboid = function (context, boid) {
