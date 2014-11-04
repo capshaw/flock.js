@@ -165,22 +165,22 @@ var flockApp = function() {
         calculateMovementAndDraw();
     }
 
-	/* reset the numbers used in movement calculations */
-	var resetTotals = function () {
-		var i = flock.length;
-		/* zero out totals */
+    /* Reset the numbers used in movement calculations */
+    var resetTotals = function () {
+        var i = flock.length;
+        /* zero out totals */
         while(--i) {
             boid = flock[i];
             boid.locals = 0;
             boid.averageXHeading = 0;
             boid.averageYHeading = 0;
         }
-	}
+    }
 
-	/* Record each local boid */
-	var findLocals = function () {
+    /* Record each local boid */
+    var findLocals = function () {
         var i = flock.length, j, other;
-		/* find locals */
+        /* find locals */
         while(--i) {
             boid = flock[i];
             /* Find local boids. Fun O(n^2/2) times! */
@@ -197,14 +197,14 @@ var flockApp = function() {
                 }
             }
         }
-	}
+    }
 
-	/* Calulates the boid's next position & draws it to the canvas */
-	var calculateMovementAndDraw = function () {
-		/* calculate movement */
+    /* Calulates the boid's next position & draws it to the canvas */
+    var calculateMovementAndDraw = function () {
+        /* calculate movement */
         var i = flock.length, boid,
-			newXHeading, newYHeading,
-			dtheta;
+            newXHeading, newYHeading,
+            dtheta;
         while(--i) {
             boid = flock[i];
             if(boid.locals > 0) {
@@ -241,7 +241,7 @@ var flockApp = function() {
 
             drawboid(frontContext, boid);
         }
-	}
+    }
 
     /* Draw a boid to the front canvas and it's trail to the back canvas. */
     var drawboid = function (context, boid) {
