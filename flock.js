@@ -160,26 +160,46 @@ var flockApp = function() {
     /* Update each of the boid's vectors and position on the canvas. */
     var updateFlock = function () {
         clearCanvas();
-        $.each(flock, function(i, boid) {
-
+        var i = flock.length,
+            j,
+            boid,
+            other;
+        /* zero out totals */
+        while(--i) {
+            boid = flock[i];
+            boid.locals = 0;
+            boid.averageXHeading = 0;
+            boid.averageYHeading = 0;
+        }
+        /* find locals */
+        i = flock.length;
+        while(--i) {
+            boid = flock[i];
             /* Find local boids. Fun O(n^2) times! */
-            var locals = [];
-            var averageXHeading = 0;
-            var averageYHeading = 0;
-            $.each(flock, function(j, other) {
+            j = i;
+            while(--j) {
+                other = flock[j];
                 if(distance(boid, other) < options.boidSight) {
-                    locals.push(other);
-                    averageXHeading += Math.cos(other.theta);
-                    averageYHeading += Math.sin(other.theta);
+                    boid.locals++;
+                    boid.averageXHeading += Math.cos(other.theta);
+                    boid.averageYHeading += Math.sin(other.theta);
+                    other.locals++;
+                    other.averageXHeading += Math.cos(boid.theta);
+                    other.averageYHeading += Math.sin(boid.theta);
                 }
-            });
-            if(locals.length > 0) {
-                averageXHeading /= locals.length;
-                averageYHeading /= locals.length;
+            }
+        }
+        /* calculate movement */
+        i = flock.length;
+        while(--i) {
+            boid = flock[i];
+            if(boid.locals > 0) {
+                boid.averageXHeading /= boid.locals;
+                boid.averageYHeading /= boid.locals;
 
                 // Move torwards average local heading.
-                var newYHeading = (averageYHeading + Math.sin(boid.theta))/2;
-                var newXHeading = (averageXHeading + Math.cos(boid.theta))/2;
+                var newYHeading = (boid.averageYHeading + Math.sin(boid.theta))/2;
+                var newXHeading = (boid.averageXHeading + Math.cos(boid.theta))/2;
                 boid.theta = Math.atan2(newYHeading, newXHeading);
             }
 
@@ -206,7 +226,7 @@ var flockApp = function() {
             boid.y = mod(boid.y, frontCanvas.height);
 
             drawboid(frontContext, boid);
-        });
+        }
     }
 
     /* Draw a boid to the front canvas and it's trail to the back canvas. */
